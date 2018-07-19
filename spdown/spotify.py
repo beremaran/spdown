@@ -79,5 +79,6 @@ class Spotify:
         _track.artist = track['artists'][0]['name']
         _track.title = track['name']
         _track.spotify_id = track['id']
+        _track.album_name = track['album']['name']
 
         return _track

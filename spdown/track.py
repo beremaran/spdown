@@ -30,6 +30,7 @@ class Track:
     artist: str
     title: str
     youtube_id: str
+    album_name: str
 
     def __init__(self):
         pass

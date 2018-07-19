@@ -138,7 +138,8 @@ class Youtube:
         mp3 = eyed3.load(ytdl_options['outtmpl'].replace('%(ext)s', 'mp3'))
         mp3.tag.artist = track.artist
         mp3.tag.title = track.title
-        mp3.tag.album = playlist_name
+        mp3.tag.album = track.album_name
+        mp3.tag.album_artist = track.artist
         mp3.tag.save()
 
     def download_tracks(self, tracks: list, playlist_name: str = None):
