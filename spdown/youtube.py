@@ -122,9 +122,9 @@ class Youtube:
             directory = directory.replace(':', '')
 
             outtmpl = ytdl_options['outtmpl']
-            outtmpl = outtmpl.split('/')
+            outtmpl = outtmpl.split(os.path.sep)
             outtmpl.insert(-1, directory)
-            ytdl_options['outtmpl'] = '/'.join(outtmpl)
+            ytdl_options['outtmpl'] = os.path.sep.join(outtmpl)
 
         ytdl = youtube_dl.YoutubeDL(ytdl_options)
 
