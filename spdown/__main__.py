@@ -25,12 +25,15 @@ SOFTWARE.
 """
 
 import sys
+import logging
 import argparse
 
 from spdown.config import Config
 from spdown.secrets import Secrets
 from spdown.spotify import Spotify
 from spdown.youtube import Youtube
+
+logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='spdown',
