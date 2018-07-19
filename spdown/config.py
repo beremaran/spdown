@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 MIT License
 
@@ -30,8 +29,8 @@ from json import JSONDecodeError
 
 
 class Config:
-    _config_path: str = None
-    _configuration: dict = None
+    _config_path : str = None
+    _configuration : dict = None
 
     def __init__(self):
         pass
@@ -54,11 +53,8 @@ class Config:
             while retry:
                 retry = False
 
-                try:
-                    with open(Config._config_path, 'r') as f:
-                        Config._configuration = json.load(f)
-                except JSONDecodeError:
-                    retry = True
+                with open(Config._config_path, 'r') as f:
+                    Config._configuration = json.load(f)
 
             Config._fix_path_errors()
 
