@@ -43,6 +43,11 @@ class Config:
             self._config_path = 'config.json'
             return True
 
+        home_config = os.path.join(os.path.expanduser('~'), '.config', 'spdown', 'config')
+        if os.path.exists(home_config):
+            self._config_path = home_config
+            return True
+
         return False
 
     def _load(self):
