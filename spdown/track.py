@@ -26,14 +26,13 @@ SOFTWARE.
 
 
 class Track:
-    spotify_id: str
-    artist: str
-    title: str
-    youtube_id: str
-    album_name: str
 
     def __init__(self):
-        pass
+        self.spotify_id = None
+        self.artist = None
+        self.title = None
+        self.youtube_id = None
+        self.album_name = None
 
     def to_dict(self) -> dict:
         pass

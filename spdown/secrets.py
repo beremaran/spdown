@@ -39,9 +39,6 @@ SECRET_PATHS = OrderedDict([
 
 
 class Secrets:
-    _secret_file: str
-    _secrets: dict
-
     def __init__(self, secret_file: str = None, secrets: dict = None):
         self._secret_file = secret_file
         self._secrets = secrets

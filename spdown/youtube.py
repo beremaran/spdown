@@ -24,6 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from __future__ import print_function
+
 import multiprocessing
 import os
 import re
@@ -54,10 +56,6 @@ class YoutubeLogger:
 
 
 class Youtube:
-    _developer_key: str
-    _config: Config
-    _secrets: Secrets
-
     def __init__(self, configuration_path: str = None, secrets_path: str = None):
         self._secrets = Secrets(secrets_path)
         self._config = Config(configuration_path)

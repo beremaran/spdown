@@ -33,10 +33,6 @@ from spdown.track import Track
 
 
 class Spotify:
-    _credentials: SpotifyClientCredentials
-    _client: spotipy.Spotify
-    _secrets: Secrets
-
     def __init__(self, secrets_path: str = None):
         self._secrets = Secrets(secrets_path)
 
