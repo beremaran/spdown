@@ -12,7 +12,6 @@ setuptools.setup(
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
     long_description=long_description,
-    long_description_content_type='text/markdown',
     url='https://github.com/beremaran/spdown',
     packages=setuptools.find_packages(),
     classifiers=(
