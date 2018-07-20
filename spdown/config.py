@@ -47,11 +47,13 @@ class Config:
         self._config_path = path
 
     def _find_configuration_file(self) -> bool:
+        self._config_path = None
+
         for config_path in CONFIG_PATHS.values():
             if os.path.exists(config_path):
                 self._config_path = config_path
 
-        return False
+        return self._config_path is not None
 
     def _load(self):
         if self._configuration is not None:
