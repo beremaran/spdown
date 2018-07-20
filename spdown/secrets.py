@@ -58,10 +58,36 @@ class Secrets:
 
     def _load(self):
         if self._secret_file is None:
-            self._find_secret_file()
+            result = self._find_secret_file()
+            if not result:
+                os.makedirs(
+                    os.path.sep.join(SECRET_PATHS['home'].split(os.path.sep)[:-1])
+                )
+
+                self._secret_file = SECRET_PATHS['home']
+                self._secrets = {
+                    'spotify': {
+                        'username': '',
+                        'client_id': '',
+                        'client_secret': ''
+                    },
+                    'youtube': {
+                        'developer_key': ''
+                    }
+                }
+
+                self._save()
+
         if self._secrets is None:
             with open(self._secret_file, 'r') as f:
                 self._secrets = json.load(f)
+
+    def _save(self):
+        if self._secret_file is None:
+            self._find_secret_file()
+
+        with open(self._secret_file, 'w') as f:
+            json.dump(self._secrets, f, indent=4)
 
     def get_spotify_credentials(self) -> tuple:
         self._load()
