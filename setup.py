@@ -24,7 +24,8 @@ setuptools.setup(
         'youtube-dl',
         'google-api-python-client',
         'google-auth',
-        'spotipy'
+        'spotipy',
+        'eyed3'
     ],
     scripts=[
         'bin/spdown'
