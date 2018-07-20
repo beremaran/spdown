@@ -24,12 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
-import logging
 import argparse
+import logging
+import sys
 
-from spdown.config import Config
-from spdown.secrets import Secrets
 from spdown.spotify import Spotify
 from spdown.youtube import Youtube
 
