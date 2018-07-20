@@ -26,6 +26,14 @@ SOFTWARE.
 import json
 import os
 
+CONFIG_PATHS = {
+    'home': os.path.join(
+        os.path.expanduser('~'), '.config',
+        'spdown', 'config'
+    ),
+    'local': 'config.json'
+}
+
 
 class Config:
     _config_path: str
@@ -39,14 +47,9 @@ class Config:
         self._config_path = path
 
     def _find_configuration_file(self) -> bool:
-        if os.path.exists('config.json'):
-            self._config_path = 'config.json'
-            return True
-
-        home_config = os.path.join(os.path.expanduser('~'), '.config', 'spdown', 'config')
-        if os.path.exists(home_config):
-            self._config_path = home_config
-            return True
+        for config_path in CONFIG_PATHS.values():
+            if os.path.exists(config_path):
+                self._config_path = config_path
 
         return False
 
