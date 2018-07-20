@@ -49,7 +49,7 @@ class Config:
         if self._config_path is None:
             self._find_configuration_file()
         if self._configuration is None:
-            with open(Config._config_path, 'r') as f:
+            with open(self._config_path, 'r') as f:
                 self._configuration = json.load(f)
 
             self._fix_path_errors()
