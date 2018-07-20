@@ -130,9 +130,6 @@ class Youtube:
         outtmpl.insert(-1, track.album_name)
         outtmpl = os.path.sep.join(outtmpl)
 
-        file_directory = os.path.sep.join(outtmpl.split(os.path.sep)[:-1])
-        os.makedirs(file_directory)
-
         ytdl_options['outtmpl'] = outtmpl
 
         ytdl = youtube_dl.YoutubeDL(ytdl_options)
