@@ -122,17 +122,18 @@ class Youtube:
             return
 
         ytdl_options = self._get_ytdl_options(str(track))
-        if playlist_name is not None:
-            directory = playlist_name.lower()
-            directory = NON_ALPHANUM_PATTERN.sub('', directory)
 
-            outtmpl = ytdl_options['outtmpl']
-            outtmpl = outtmpl.split(os.path.sep)
-            outtmpl.insert(-1, track.artist)
-            outtmpl.insert(-1, track.album_name)
-            outtmpl = os.path.sep.join(outtmpl)
+        # create directories
+        outtmpl = ytdl_options['outtmpl']
+        outtmpl = outtmpl.split(os.path.sep)
+        outtmpl.insert(-1, track.artist)
+        outtmpl.insert(-1, track.album_name)
+        outtmpl = os.path.sep.join(outtmpl)
 
-            ytdl_options['outtmpl'] = outtmpl
+        file_directory = os.path.sep.join(outtmpl.split(os.path.sep)[:-1])
+        os.makedirs(file_directory)
+
+        ytdl_options['outtmpl'] = outtmpl
 
         ytdl = youtube_dl.YoutubeDL(ytdl_options)
 
