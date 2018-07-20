@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='spdown',
-    version='0.0.1',
+    version='0.0.2',
     author='Berke Emrecan Arslan',
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
@@ -15,15 +15,18 @@ setuptools.setup(
     long_description=long_description,
     url='https://github.com/beremaran/spdown',
     packages=setuptools.find_packages(),
-    classifiers=(
+    classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent'
-    ),
+    ],
     install_requires=[
         'youtube-dl',
         'google-api-python-client',
         'google-auth',
         'spotipy'
+    ],
+    scripts=[
+        'bin/spdown'
     ]
 )
