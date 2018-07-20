@@ -144,12 +144,13 @@ class Youtube:
             sys.stderr.write('Can\'t open downloaded file for tagging: {}\n'.format(mp3_path))
             sys.stderr.write('Falling back to manual tag initializing\n')
             mp3 = eyed3.mp3.Mp3AudioFile(mp3_path)
-            mp3.initTag()
+            mp3.initTag(version=eyed3.id3.ID3_V2_3)
 
         mp3.tag.artist = track.artist
         mp3.tag.title = track.title
         mp3.tag.album = track.album_name
         mp3.tag.album_artist = track.artist
+        mp3.tag.disc_num = 1
         mp3.tag.save()
 
     def download_tracks(self, tracks: list, playlist_name: str = None):
