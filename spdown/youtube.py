@@ -40,6 +40,7 @@ from spdown.track import Track
 
 NON_ALPHANUM_PATTERN = re.compile('[\W_]+', re.UNICODE)
 BASE_YOUTUBE_URL = 'https://www.youtube.com/watch?v={}'
+FILENAME_ILLEGAL_CHARS = ['[', ']', '"', '/']
 
 
 class YoutubeLogger:
@@ -93,7 +94,8 @@ class Youtube:
     def _get_ytdl_options(self, filename):
         download_directory = Config.get('download_directory')
 
-        filename = filename.replace('/', '-')
+        for illegal_char in FILENAME_ILLEGAL_CHARS:
+            filename = filename.replace(illegal_char, '')
         filename = os.path.join(download_directory, filename + '.%(ext)s')
 
         if not os.path.exists(download_directory):
