@@ -25,7 +25,10 @@ SOFTWARE.
 """
 
 import multiprocessing
+import string
+import sys
 import os
+import re
 
 import eyed3
 import youtube_dl
@@ -35,6 +38,7 @@ from spdown.config import Config
 from spdown.secrets import Secrets
 from spdown.track import Track
 
+NON_ALPHANUM_PATTERN = re.compile('[\W_]+', re.UNICODE)
 BASE_YOUTUBE_URL = 'https://www.youtube.com/watch?v={}'
 
 
@@ -102,6 +106,7 @@ class Youtube:
                 'preferredcodec': 'mp3',
                 'preferredquality': '192'
             }],
+            'add-metadata': True,
             'logger': YoutubeLogger(),
             'outtmpl': filename
         }
@@ -117,9 +122,7 @@ class Youtube:
         ytdl_options = self._get_ytdl_options(str(track))
         if playlist_name is not None:
             directory = playlist_name.lower()
-            directory = directory.replace(' ', '_')
-            directory = directory.replace('-', '')
-            directory = directory.replace(':', '')
+            directory = NON_ALPHANUM_PATTERN.sub('', directory)
 
             outtmpl = ytdl_options['outtmpl']
             outtmpl = outtmpl.split(os.path.sep)
@@ -135,7 +138,12 @@ class Youtube:
         ])
 
         # update tags
-        mp3 = eyed3.load(ytdl_options['outtmpl'].replace('%(ext)s', 'mp3'))
+        mp3_path = ytdl_options['outtmpl'].replace('%(ext)s', 'mp3')
+        mp3 = eyed3.load(mp3_path)
+        if mp3 is None:
+            sys.stderr.write('Can\'t open downloaded file for tagging: {}\n'.format(mp3_path))
+            return
+
         mp3.tag.artist = track.artist
         mp3.tag.title = track.title
         mp3.tag.album = track.album_name
