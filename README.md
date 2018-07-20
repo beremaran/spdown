@@ -6,6 +6,16 @@ A tool for downloading Spotify playlists from YouTube.
 
 ## Getting Started
 
+### Dependencies
+ * [ffmpeg](https://www.ffmpeg.org/)
+ * [youtube-dl](https://github.com/rg3/youtube-dl)
+ * [eyed3](https://github.com/nicfit/eyeD3)
+ * [spotipy](https://github.com/plamere/spotipy)
+ * [google-api-python-client](https://github.com/google/google-api-python-client)
+
+
+ * __Don't forget to include _ffmpeg_ to your PATH__
+
 ### Installation
 
 #### Using pip
