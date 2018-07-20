@@ -76,7 +76,7 @@ class Config:
                 self._save()
 
                 sys.stderr.write(
-                    'Please fill your configuration in {}'.format(
+                    'Please fill your configuration in {}\n'.format(
                         CONFIG_PATHS['home']
                     )
                 )

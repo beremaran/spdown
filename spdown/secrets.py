@@ -80,7 +80,7 @@ class Secrets:
                 self._save()
 
                 sys.stderr.write(
-                    'Please fill your Spotify and YouTube secrets in {}'.format(
+                    'Please fill your Spotify and YouTube secrets in {}\n'.format(
                         SECRET_PATHS['home']
                     )
                 )
