@@ -85,6 +85,8 @@ class Secrets:
                     )
                 )
 
+                exit(0)
+
         if self._secrets is None:
             with open(self._secret_file, 'r') as f:
                 self._secrets = json.load(f)

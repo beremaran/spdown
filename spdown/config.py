@@ -81,6 +81,8 @@ class Config:
                     )
                 )
 
+                exit(0)
+
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
                 self._configuration = json.load(f)
