@@ -95,7 +95,7 @@ class Config:
         if self._config_path is None:
             self._find_configuration_file()
 
-        with open(Config._config_path, 'w') as f:
+        with open(self._config_path, 'w') as f:
             json.dump(self._configuration, f, indent=4)
 
     def get(self, key) -> any:
