@@ -25,6 +25,7 @@ SOFTWARE.
 """
 
 import spotipy
+from spdown.youtube import FILENAME_ILLEGAL_CHARS
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spdown.secrets import Secrets
@@ -82,11 +83,11 @@ class Spotify:
         _track.album_name = track['album']['name']
 
         # remove trailing dots
-        while _track.artist[-1] == '.':
+        while _track.artist[-1] in FILENAME_ILLEGAL_CHARS:
             _track.artist = _track.artist[:-1]
-        while _track.title[-1] == '.':
+        while _track.title[-1] in FILENAME_ILLEGAL_CHARS:
             _track.title = _track.title[:-1]
-        while _track.album_name[-1] == '.':
+        while _track.album_name[-1] in FILENAME_ILLEGAL_CHARS:
             _track.album_name = _track.album_name[:-1]
 
         return _track
