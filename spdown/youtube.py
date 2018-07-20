@@ -40,7 +40,7 @@ from spdown.track import Track
 
 NON_ALPHANUM_PATTERN = re.compile('[\W_]+', re.UNICODE)
 BASE_YOUTUBE_URL = 'https://www.youtube.com/watch?v={}'
-FILENAME_ILLEGAL_CHARS = ['[', ']', '"', '/', ':']
+FILENAME_ILLEGAL_CHARS = ['[', ']', '"', '/', ':', '?']
 
 
 class YoutubeLogger:
