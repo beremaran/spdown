@@ -28,8 +28,8 @@ import os
 
 
 class Config:
-    _config_path: str = None
-    _configuration: dict = None
+    _config_path: str
+    _configuration: dict
 
     def __init__(self, config_path: str = None, configuration: dict = None):
         self._config_path = config_path
