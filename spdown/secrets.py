@@ -25,6 +25,7 @@ SOFTWARE.
 """
 
 import os
+import sys
 import json
 
 SECRET_PATHS = {
@@ -77,6 +78,12 @@ class Secrets:
                 }
 
                 self._save()
+
+                sys.stderr.write(
+                    'Please fill your Spotify and YouTube secrets in {}'.format(
+                        SECRET_PATHS['home']
+                    )
+                )
 
         if self._secrets is None:
             with open(self._secret_file, 'r') as f:
