@@ -81,4 +81,12 @@ class Spotify:
         _track.spotify_id = track['id']
         _track.album_name = track['album']['name']
 
+        # remove trailing dots
+        while _track.artist[-1] == '.':
+            _track.artist = _track.artist[:-1]
+        while _track.title[-1] == '.':
+            _track.title = _track.title[:-1]
+        while _track.album_name[-1] == '.':
+            _track.album_name = _track.album_name[:-1]
+
         return _track
