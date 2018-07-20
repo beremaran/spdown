@@ -62,15 +62,17 @@ class Config:
         if self._config_path is None:
             result = self._find_configuration_file()
             if not result:
-                self._config_path = os.path.join(
-                    os.path.expanduser('~'), '.config', 'spdown', 'config'
+                os.makedirs(
+                    os.path.sep.join(CONFIG_PATHS['home'].split(os.path.sep)[:-1])
                 )
 
+                self._config_path = CONFIG_PATHS['home']
                 self._configuration = {
                     'download_directory': os.path.join(
                         os.path.expanduser('~'), 'Music'
                     )
                 }
+                self._save()
 
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
