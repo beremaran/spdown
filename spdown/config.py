@@ -38,16 +38,30 @@ class Config:
     def set_config_path(self, path):
         self._config_path = path
 
-    def _find_configuration_file(self):
+    def _find_configuration_file(self) -> bool:
         if os.path.exists('config.json'):
             self._config_path = 'config.json'
+            return True
+
+        return False
 
     def _load(self):
         if self._configuration is not None:
             return
 
         if self._config_path is None:
-            self._find_configuration_file()
+            result = self._find_configuration_file()
+            if not result:
+                self._config_path = os.path.join(
+                    os.path.expanduser('~'), '.config', 'spdown', 'config'
+                )
+
+                self._configuration = {
+                    'download_directory': os.path.join(
+                        os.path.expanduser('~'), 'Music'
+                    )
+                }
+
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
                 self._configuration = json.load(f)
