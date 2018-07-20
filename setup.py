@@ -11,6 +11,7 @@ setuptools.setup(
     author='Berke Emrecan Arslan',
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
+    keywords='youtube spotify spotify-api spotify-playlist',
     long_description=long_description,
     url='https://github.com/beremaran/spdown',
     packages=setuptools.find_packages(),
