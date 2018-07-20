@@ -19,9 +19,30 @@ A tool for downloading Spotify playlists from YouTube.
 ### Installation
 
 #### Using pip
+
+    pip install --upgrade spdown
+
+#### Using easy_install
+
+    easy_install spdown
+
 #### Manually
 
+    python setup.py install
+
 ### Usage
+
+    usage: spdown [-h] [--config CONFIG] [--secrets SECRETS] spotify_uri
+
+    Downloads public Spotify playlists from YouTube
+    
+    positional arguments:
+      spotify_uri        Spotify Playlist URI to download
+    
+    optional arguments:
+      -h, --help         show this help message and exit
+      --config CONFIG    Configuration File
+      --secrets SECRETS  Spotify and Youtube API Secrets File
 
 ## Versioning
 We use [SemVer](http://semver.org) for versioning. For the versions available, see the
