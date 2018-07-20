@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='spdown',
-    version='0.0.3',
+    version='0.0.4',
     author='Berke Emrecan Arslan',
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
