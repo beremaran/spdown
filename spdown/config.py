@@ -25,6 +25,7 @@ SOFTWARE.
 
 import json
 import os
+import sys
 
 CONFIG_PATHS = {
     'home': os.path.join(
@@ -73,6 +74,12 @@ class Config:
                     )
                 }
                 self._save()
+
+                sys.stderr.write(
+                    'Please fill your configuration in {}'.format(
+                        CONFIG_PATHS['home']
+                    )
+                )
 
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
