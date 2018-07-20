@@ -23,72 +23,64 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os
 import json
-from json import JSONDecodeError
+import os
 
 
 class Config:
-    _config_path : str = None
-    _configuration : dict = None
+    _config_path: str = None
+    _configuration: dict = None
 
-    def __init__(self):
-        pass
+    def __init__(self, config_path: str = None, configuration: dict = None):
+        self._config_path = config_path
+        self._configuration = configuration
 
-    @staticmethod
-    def set_config_path(path):
-        Config._config_path = path
+    def set_config_path(self, path):
+        self._config_path = path
 
-    @staticmethod
-    def _find_configuration_file():
+    def _find_configuration_file(self):
         if os.path.exists('config.json'):
-            Config._config_path = 'config.json'
+            self._config_path = 'config.json'
 
-    @staticmethod
-    def _load():
-        if Config._config_path is None:
-            Config._find_configuration_file()
-        if Config._configuration is None:
-            retry = True
-            while retry:
-                retry = False
+    def _load(self):
+        if self._configuration is not None:
+            return
 
-                with open(Config._config_path, 'r') as f:
-                    Config._configuration = json.load(f)
+        if self._config_path is None:
+            self._find_configuration_file()
+        if self._configuration is None:
+            with open(Config._config_path, 'r') as f:
+                Config._configuration = json.load(f)
 
-            Config._fix_path_errors()
+            self._fix_path_errors()
 
-    @staticmethod
-    def _fix_path_errors():
-        config = Config._configuration
+    def _fix_path_errors(self):
+        config = self._configuration
         download_directory = config['download_directory']
 
         if download_directory[-1] == os.path.sep:
             download_directory = download_directory[:-1]
             config['download_directory'] = download_directory
 
-            Config._configuration = config
-            Config._save()
+            self._configuration = config
+            self._save()
 
-    @staticmethod
-    def _save():
-        if Config._config_path is None:
-            Config._find_configuration_file()
+    def _save(self):
+        if self._config_path is None:
+            self._find_configuration_file()
 
         with open(Config._config_path, 'w') as f:
-            json.dump(Config._configuration, f, indent=4)
+            json.dump(self._configuration, f, indent=4)
 
-    @staticmethod
-    def get(key) -> any:
-        Config._load()
+    def get(self, key) -> any:
+        self._load()
 
-        if key not in Config._configuration.keys():
+        if key not in self._configuration.keys():
             return None
 
-        return Config._configuration[key]
+        return self._configuration[key]
 
-    @staticmethod
-    def set(key, value):
-        Config._load()
-        Config._configuration[key] = value
-        Config._save()
+    def set(self, key, value):
+        self._load()
+        self._configuration[key] = value
+        self._save()
