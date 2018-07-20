@@ -35,16 +35,19 @@ from spdown.track import Track
 class Spotify:
     _credentials: SpotifyClientCredentials
     _client: spotipy.Spotify
+    _secrets: Secrets
 
-    def __init__(self):
-        client_id, client_secret = Secrets.get_spotify_credentials()
+    def __init__(self, secrets_path: str = None):
+        self._secrets = Secrets(secrets_path)
+
+        client_id, client_secret = self._secrets.get_spotify_credentials()
         self._credentials = SpotifyClientCredentials(client_id=client_id,
                                                      client_secret=client_secret)
         self._client = spotipy.Spotify(client_credentials_manager=self._credentials)
 
     def extract_tracks(self, playlist_id: str) -> tuple:
         tracks_final = []
-        username = Secrets.get_spotify_username()
+        username = self._secrets.get_spotify_username()
 
         if ':' in playlist_id:
             playlist_id = playlist_id.split(':')[-1]

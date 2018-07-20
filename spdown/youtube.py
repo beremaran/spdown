@@ -25,10 +25,9 @@ SOFTWARE.
 """
 
 import multiprocessing
-import string
-import sys
 import os
 import re
+import sys
 
 import eyed3
 import youtube_dl
@@ -56,10 +55,14 @@ class YoutubeLogger:
 
 class Youtube:
     _developer_key: str
-    _service = None
+    _config: Config
+    _secrets: Secrets
 
-    def __init__(self):
-        self._developer_key = Secrets.get_youtube_dev_key()
+    def __init__(self, configuration_path: str = None, secrets_path: str = None):
+        self._secrets = Secrets(secrets_path)
+        self._config = Config(configuration_path)
+
+        self._developer_key = self._secrets.get_youtube_dev_key()
         self._service = build('youtube', 'v3', developerKey=self._developer_key)
 
     def search_track(self, track: Track) -> dict:
@@ -92,7 +95,7 @@ class Youtube:
         return track
 
     def _get_ytdl_options(self, filename):
-        download_directory = Config.get('download_directory')
+        download_directory = self._config.get('download_directory')
 
         for illegal_char in FILENAME_ILLEGAL_CHARS:
             filename = filename.replace(illegal_char, '')

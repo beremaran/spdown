@@ -59,9 +59,6 @@ if __name__ == "__main__":
     configuration_file = args.config
     secrets_file = args.secrets
 
-    Secrets.set_secret_file(secrets_file)
-    Config.set_config_path(configuration_file)
-
     spotify_uri = spotify_uri.split(',')
     spotify_uri = [
         uri.strip()
@@ -79,8 +76,8 @@ if __name__ == "__main__":
             sys.stderr.write('Given type: {}\n'.format(uri_tokens[-2]))
             exit(2)
 
-    spotify = Spotify()
-    youtube = Youtube()
+    spotify = Spotify(secrets_file)
+    youtube = Youtube(configuration_file)
 
     for uri in spotify_uri:
         print('Extracting spotify tracks ...')
