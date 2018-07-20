@@ -63,12 +63,12 @@ class Config:
         config = Config._configuration
         download_directory = config['download_directory']
 
-        if download_directory[-1] == '/':
+        if download_directory[-1] == os.path.sep:
             download_directory = download_directory[:-1]
             config['download_directory'] = download_directory
 
-        Config._configuration = config
-        Config._save()
+            Config._configuration = config
+            Config._save()
 
     @staticmethod
     def _save():
