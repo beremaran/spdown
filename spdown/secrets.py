@@ -27,6 +27,14 @@ SOFTWARE.
 import os
 import json
 
+SECRET_PATHS = {
+    'home': os.path.join(
+        os.path.expanduser('~'), '.config',
+        'spdown', 'secrets'
+    ),
+    'local': 'secrets'
+}
+
 
 class Secrets:
     _secret_file: str
@@ -40,11 +48,13 @@ class Secrets:
         self._secret_file = path
 
     def _find_secret_file(self):
-        if os.path.exists('secrets.json'):
-            self._secret_file = 'secrets.json'
-            return
-
         self._secret_file = None
+
+        for secrets_path in SECRET_PATHS.values():
+            if os.path.exists(secrets_path):
+                self._secret_file = secrets_path
+
+        return self._secret_file is not None
 
     def _load(self):
         if self._secret_file is None:
