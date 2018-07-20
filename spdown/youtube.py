@@ -142,7 +142,9 @@ class Youtube:
         mp3 = eyed3.load(mp3_path)
         if mp3 is None:
             sys.stderr.write('Can\'t open downloaded file for tagging: {}\n'.format(mp3_path))
-            return
+            sys.stderr.write('Falling back to manual tag initializing\n')
+            mp3 = eyed3.mp3.Mp3AudioFile(mp3_path)
+            mp3.initTag()
 
         mp3.tag.artist = track.artist
         mp3.tag.title = track.title
