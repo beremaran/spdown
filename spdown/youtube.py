@@ -140,6 +140,8 @@ class Youtube:
             BASE_YOUTUBE_URL.format(track.youtube_id)
         ])
 
+        print('Tagging {} ...'.format(str(track)))
+
         # update tags
         mp3_path = ytdl_options['outtmpl'].replace('%(ext)s', 'mp3')
         mp3 = eyed3.load(mp3_path)
