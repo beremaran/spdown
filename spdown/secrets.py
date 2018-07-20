@@ -27,14 +27,15 @@ SOFTWARE.
 import os
 import sys
 import json
+from collections import OrderedDict
 
-SECRET_PATHS = {
-    'home': os.path.join(
+SECRET_PATHS = OrderedDict([
+    ('local', 'secrets.json'),
+    ('home', os.path.join(
         os.path.expanduser('~'), '.config',
         'spdown', 'secrets'
-    ),
-    'local': 'secrets'
-}
+    ))
+])
 
 
 class Secrets:

@@ -26,14 +26,15 @@ SOFTWARE.
 import json
 import os
 import sys
+from collections import OrderedDict
 
-CONFIG_PATHS = {
-    'home': os.path.join(
+CONFIG_PATHS = OrderedDict([
+    ('local', 'config.json'),
+    ('home', os.path.join(
         os.path.expanduser('~'), '.config',
         'spdown', 'config'
-    ),
-    'local': 'config.json'
-}
+    ))
+])
 
 
 class Config:
