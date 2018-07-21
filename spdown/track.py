@@ -33,6 +33,7 @@ class Track:
         self.title = None
         self.youtube_id = None
         self.album_name = None
+        self.artist_genre = None
 
     def to_dict(self) -> dict:
         pass

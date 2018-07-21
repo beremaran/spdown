@@ -72,14 +72,19 @@ class Spotify:
 
         return tracks_list
 
-    @staticmethod
-    def _extract_track(track) -> Track:
+    def _extract_track(self, track) -> Track:
         _track = Track()
 
         _track.artist = track['artists'][0]['name']
         _track.title = track['name']
         _track.spotify_id = track['id']
         _track.album_name = track['album']['name']
+
+        artist_id = track['artists'][0]['id']
+        if artist_id is not None:
+            genres = self._client.artist(artist_id)['genres']
+            if len(genres) > 0:
+                _track.artist_genre = genres[0]
 
         # remove trailing dots
         while _track.artist[-1] in FILENAME_ILLEGAL_CHARS:

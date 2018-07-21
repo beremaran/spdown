@@ -157,6 +157,7 @@ class Youtube:
         mp3.tag.album = track.album_name
         mp3.tag.album_artist = track.artist
         mp3.tag.disc_num = 1
+        mp3.tag.genre = track.artist_genre
         mp3.tag.save()
 
         return mp3_path
