@@ -85,4 +85,4 @@ if __name__ == "__main__":
         print('Searching tracks on YouTube ...')
         tracks = youtube.modify_tracks(tracks)
         print('Downloading tracks from YouTube ...')
-        youtube.download_tracks(tracks, playlist_name)
+        youtube.download_tracks(tracks)
