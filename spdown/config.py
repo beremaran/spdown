@@ -37,6 +37,10 @@ CONFIG_PATHS = OrderedDict([
 ])
 
 
+def is_empty(x):
+    return x is None or len(x) == 0
+
+
 class Config:
     def __init__(self, config_path: str = None, configuration: dict = None):
         self._config_path = config_path
@@ -53,6 +57,16 @@ class Config:
                 self._config_path = config_path
 
         return self._config_path is not None
+
+    @staticmethod
+    def _warn_user_to_fill_config():
+        sys.stderr.write(
+            'Please fill your configuration in {}\n'.format(
+                CONFIG_PATHS['home']
+            )
+        )
+
+        exit(0)
 
     def _load(self):
         if self._configuration is not None:
@@ -72,18 +86,14 @@ class Config:
                     )
                 }
                 self._save()
-
-                sys.stderr.write(
-                    'Please fill your configuration in {}\n'.format(
-                        CONFIG_PATHS['home']
-                    )
-                )
-
-                exit(0)
+                self._warn_user_to_fill_config()
 
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
                 self._configuration = json.load(f)
+
+            if is_empty(self._configuration['download_directory']):
+                self._warn_user_to_fill_config()
 
             self._fix_path_errors()
 
