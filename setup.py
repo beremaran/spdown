@@ -2,9 +2,6 @@
 
 import setuptools
 
-with open('README.md', 'r') as fh:
-    long_description = fh.read()
-
 setuptools.setup(
     name='spdown',
     version='0.0.4',
@@ -12,7 +9,6 @@ setuptools.setup(
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
     keywords='youtube spotify spotify-api spotify-playlist',
-    long_description=long_description,
     url='https://github.com/beremaran/spdown',
     packages=setuptools.find_packages(),
     classifiers=[
