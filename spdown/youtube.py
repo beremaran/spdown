@@ -132,7 +132,7 @@ class Youtube:
         outtmpl.insert(-1, track.album_name)
         outtmpl = os.path.sep.join(outtmpl)
 
-        if self._exists(outtmpl):
+        if self._exists(outtmpl.replace('%(ext)s', 'mp3')):
             print('Skipping already downloaded file ...')
             return
 
