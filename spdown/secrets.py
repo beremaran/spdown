@@ -55,6 +55,16 @@ class Secrets:
 
         return self._secret_file is not None
 
+    @staticmethod
+    def _warn_user_to_fill_secrets():
+        sys.stderr.write(
+            'Please fill your Spotify and YouTube secrets in {}\n'.format(
+                SECRET_PATHS['home']
+            )
+        )
+
+        exit(0)
+
     def _load(self):
         if self._secret_file is None:
             result = self._find_secret_file()
@@ -76,18 +86,18 @@ class Secrets:
                 }
 
                 self._save()
-
-                sys.stderr.write(
-                    'Please fill your Spotify and YouTube secrets in {}\n'.format(
-                        SECRET_PATHS['home']
-                    )
-                )
-
-                exit(0)
+                self._warn_user_to_fill_secrets()
 
         if self._secrets is None:
             with open(self._secret_file, 'r') as f:
                 self._secrets = json.load(f)
+
+            if self._secrets['spotify']['client_id'] is None:
+                self._warn_user_to_fill_secrets()
+            if self._secrets['spotify']['client_secret'] is None:
+                self._warn_user_to_fill_secrets()
+            if self._secrets['youtube']['developer_key'] is None:
+                self._warn_user_to_fill_secrets()
 
     def _save(self):
         if self._secret_file is None:
