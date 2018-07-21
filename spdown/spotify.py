@@ -95,13 +95,10 @@ class Spotify:
         artist_id = track['artists'][0]['id']
         _track.artist_genre = self._extract_artist(spotify_client=self._client, artist_id=artist_id)
 
-        # remove trailing dots
-        if len(_track.artist) > 0:
-            while _track.artist[-1] in FILENAME_ILLEGAL_CHARS:
-                _track.artist = _track.artist[:-1]
-        if len(_track.title) > 0:
-            while _track.title[-1] in FILENAME_ILLEGAL_CHARS:
-                _track.title = _track.title[:-1]
+        while len(_track.artist) > 0 and _track.artist[-1] in FILENAME_ILLEGAL_CHARS:
+            _track.artist = _track.artist[:-1]
+        while len(_track.title) > 0 and _track.title[-1] in FILENAME_ILLEGAL_CHARS:
+            _track.title = _track.title[:-1]
         # remove illegal characters from album names
         for illegal_char in FILENAME_ILLEGAL_CHARS:
             _track.album_name = _track.album_name.replace(illegal_char, '')
