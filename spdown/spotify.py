@@ -31,6 +31,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from spdown.secrets import Secrets
 from spdown.track import Track
 
+from lru import lru_cache_function
+
 
 class Spotify:
     def __init__(self, secrets_path: str = None):
@@ -72,6 +74,16 @@ class Spotify:
 
         return tracks_list
 
+    @staticmethod
+    @lru_cache_function(max_size=1024, expiration=15 * 60)
+    def _extract_artist(spotify_client, artist_id):
+        if artist_id is not None:
+            genres = spotify_client.artist(artist_id)['genres']
+            if len(genres) > 0:
+                return genres[0]
+
+        return None
+
     def _extract_track(self, track) -> Track:
         _track = Track()
 
@@ -81,10 +93,7 @@ class Spotify:
         _track.album_name = track['album']['name']
 
         artist_id = track['artists'][0]['id']
-        if artist_id is not None:
-            genres = self._client.artist(artist_id)['genres']
-            if len(genres) > 0:
-                _track.artist_genre = genres[0]
+        _track.artist_genre = self._extract_artist(spotify_client=self._client, artist_id=artist_id)
 
         # remove trailing dots
         if len(_track.artist) > 0:
