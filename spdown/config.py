@@ -83,6 +83,9 @@ class Config:
                     )
 
                 self._config_path = CONFIG_PATHS['home']
+
+        if self._configuration is None:
+            if not os.path.exists(self._config_path):
                 self._configuration = {
                     'download_directory': os.path.join(
                         os.path.expanduser('~'), 'Music'
@@ -92,7 +95,6 @@ class Config:
                 if exit_on_error:
                     self._warn_user_to_fill_config()
 
-        if self._configuration is None:
             with open(self._config_path, 'r') as f:
                 self._configuration = json.load(f)
 
