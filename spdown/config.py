@@ -68,16 +68,19 @@ class Config:
 
         exit(0)
 
-    def _load(self):
+    def _load(self, exit_on_error=True):
         if self._configuration is not None:
             return
 
         if self._config_path is None:
             result = self._find_configuration_file()
             if not result:
-                os.makedirs(
-                    os.path.sep.join(CONFIG_PATHS['home'].split(os.path.sep)[:-1])
-                )
+                config_directory = os.path.sep.join(CONFIG_PATHS['home'].split(os.path.sep)[:-1])
+
+                if not os.path.exists(config_directory):
+                    os.makedirs(
+                        config_directory
+                    )
 
                 self._config_path = CONFIG_PATHS['home']
                 self._configuration = {
@@ -86,7 +89,8 @@ class Config:
                     )
                 }
                 self._save()
-                self._warn_user_to_fill_config()
+                if exit_on_error:
+                    self._warn_user_to_fill_config()
 
         if self._configuration is None:
             with open(self._config_path, 'r') as f:
