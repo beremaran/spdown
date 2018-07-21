@@ -117,6 +117,10 @@ class Youtube:
     def _download_track_packed(self, args):
         self.download_track(*args)
 
+    @staticmethod
+    def _exists(path):
+        return os.path.exists(path) and os.stat(path).st_size > 0
+
     def download_track(self, track: Track, playlist_name: str = None):
         if track.youtube_id is None:
             print('No youtube ID for track', str(track), '!')
@@ -130,6 +134,10 @@ class Youtube:
         outtmpl.insert(-1, track.artist)
         outtmpl.insert(-1, track.album_name)
         outtmpl = os.path.sep.join(outtmpl)
+
+        if self._exists(outtmpl):
+            print('Skipping already downloaded file ...')
+            return
 
         ytdl_options['outtmpl'] = outtmpl
 
