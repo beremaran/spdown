@@ -1,6 +1,6 @@
 # spdown
 ![status-dev](https://img.shields.io/badge/status-dev-yellow.svg)
-![version-0-0-1](https://img.shields.io/badge/version-0.0.1-blue.svg)
+![version-0-0-5](https://img.shields.io/badge/version-0.0.5-blue.svg)
 
 A tool for downloading Spotify playlists from YouTube.
 
