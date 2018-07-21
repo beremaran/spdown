@@ -121,7 +121,7 @@ class Youtube:
     def _exists(path):
         return os.path.exists(path) and os.stat(path).st_size > 0
 
-    def download_track(self, track: Track, playlist_name: str = None):
+    def download_track(self, track: Track):
         if track.youtube_id is None:
             print('No youtube ID for track', str(track), '!')
             return
