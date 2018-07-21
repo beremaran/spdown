@@ -159,6 +159,8 @@ class Youtube:
         mp3.tag.disc_num = 1
         mp3.tag.save()
 
+        return mp3_path
+
     def download_tracks(self, tracks: list, playlist_name: str = None):
         thread_arguments = [
             (t, playlist_name)
