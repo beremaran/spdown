@@ -114,9 +114,6 @@ class Youtube:
             'outtmpl': filename
         }
 
-    def _download_track_packed(self, args):
-        self.download_track(*args)
-
     @staticmethod
     def _exists(path):
         return os.path.exists(path) and os.stat(path).st_size > 0
@@ -170,13 +167,8 @@ class Youtube:
 
         return mp3_path
 
-    def download_tracks(self, tracks: list, playlist_name: str = None):
-        thread_arguments = [
-            (t, playlist_name)
-            for t in tracks
-        ]
-
+    def download_tracks(self, tracks: list):
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        pool.map(self._download_track_packed, thread_arguments)
+        pool.map(self.download_track, tracks)
         pool.close()
         pool.join()
