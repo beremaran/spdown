@@ -5,6 +5,7 @@ import unittest
 from spdown.spotify import Spotify
 
 
+
 class TestSpotifyExtraction(unittest.TestCase):
     def test_track_count(self):
         spotify = Spotify()
