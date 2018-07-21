@@ -21,7 +21,8 @@ setuptools.setup(
         'google-api-python-client',
         'google-auth',
         'spotipy',
-        'eyed3'
+        'eyed3',
+        'py-lru-cache'
     ],
     scripts=[
         'bin/spdown'
