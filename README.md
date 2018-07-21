@@ -27,6 +27,7 @@ __Don't forget to include _ffmpeg_ to your PATH__
 
 #### Manually
 
+    pip install -r requirements.txt
     python setup.py install
 
 ### Usage
