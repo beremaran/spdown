@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name='spdown',
-    version='0.0.4',
+    version='0.0.5',
     author='Berke Emrecan Arslan',
     author_email='berke@beremaran.com',
     description='Download Spotify playlists from YouTube',
