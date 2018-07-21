@@ -29,6 +29,8 @@ import sys
 import json
 from collections import OrderedDict
 
+from spdown.config import is_empty
+
 SECRET_PATHS = OrderedDict([
     ('local', 'secrets.json'),
     ('home', os.path.join(
@@ -92,11 +94,11 @@ class Secrets:
             with open(self._secret_file, 'r') as f:
                 self._secrets = json.load(f)
 
-            if self._secrets['spotify']['client_id'] is None:
+            if is_empty(self._secrets['spotify']['client_id']):
                 self._warn_user_to_fill_secrets()
-            if self._secrets['spotify']['client_secret'] is None:
+            if is_empty(self._secrets['spotify']['client_secret']):
                 self._warn_user_to_fill_secrets()
-            if self._secrets['youtube']['developer_key'] is None:
+            if is_empty(self._secrets['youtube']['developer_key']):
                 self._warn_user_to_fill_secrets()
 
     def _save(self):
