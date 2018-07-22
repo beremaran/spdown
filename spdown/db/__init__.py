@@ -11,7 +11,7 @@ db_path = config.get('database_path')
 del config
 del Config
 
-engine = create_engine('sqlite:///{}'.format(db_path), echo=True)
+engine = create_engine('sqlite:///{}'.format(db_path), echo=False)
 Base.metadata.create_all(engine)
 session = sessionmaker()
 session.configure(bind=engine)
