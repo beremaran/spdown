@@ -22,7 +22,8 @@ setuptools.setup(
         'google-auth',
         'spotipy',
         'eyed3',
-        'py-lru-cache'
+        'py-lru-cache',
+        'sqlalchemy'
     ],
     scripts=[
         'bin/spdown'
