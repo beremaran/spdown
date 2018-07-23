@@ -80,9 +80,12 @@ if __name__ == "__main__":
     youtube = Youtube(configuration_file)
 
     for uri in spotify_uri:
+        spotify.import_object(uri)
+        """
         print('Extracting spotify tracks ...')
         tracks, playlist_name = spotify.extract_tracks(uri)
         print('Searching tracks on YouTube ...')
         tracks = youtube.modify_tracks(tracks)
         print('Downloading tracks from YouTube ...')
         youtube.download_tracks(tracks)
+        """
