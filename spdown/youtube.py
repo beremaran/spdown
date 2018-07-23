@@ -161,20 +161,31 @@ class Youtube:
         mp3.tag.album = track.album[0].title
         mp3.tag.album_artist = track.artists[0].name
         mp3.tag.disc_num = 1
-        mp3.tag.genre = track.album[0].genres[0].name
+
+        if len(track.album) > 0:
+            album = track.album[0]
+            if len(album.genres) > 0:
+                mp3.tag.genre = album.genres[0].name
+            else:
+                artist = track.artists[0]
+                if len(artist.genres) > 0:
+                    mp3.tag.genre = artist.genres[0].name
+
         mp3.tag.save()
 
         path_tokens = mp3_path.split(os.path.sep)
-        filename = '.'.join([
-            track.artists[0].name, track.name, 'mp3'
-        ])
+        filename = '{}.mp3'.format(
+            '-'.join([
+                track.artists[0].name, track.name
+            ])
+        )
         path_tokens[-1] = filename
         new_path = os.path.sep.join(path_tokens)
 
         os.rename(mp3_path, new_path)
         track.file_path = new_path
         session.commit()
-        
+
         return new_path
 
     def download_tracks(self, tracks: list):
