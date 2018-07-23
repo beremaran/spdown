@@ -37,6 +37,6 @@ del Config
 
 engine = create_engine('sqlite:///{}'.format(db_path), echo=False)
 Base.metadata.create_all(engine)
-session = sessionmaker()
+session = sessionmaker(expire_on_commit=False)
 session.configure(bind=engine)
 session = session()
