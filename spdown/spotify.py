@@ -50,9 +50,9 @@ class Spotify:
         if object_type == "playlist":
             self.import_playlist(spotify_id)
         if object_type == "artist":
-            self.import_artist(spotify_id)
+            self.import_artist(spotify_id, with_tracks=True)
         if object_type == "album":
-            self.import_album(spotify_id)
+            self.import_album(spotify_id, with_tracks=True)
         if object_type == "track":
             self.import_track(spotify_id)
 
@@ -95,7 +95,7 @@ class Spotify:
 
         return db_playlist
 
-    def import_artist(self, spotify_id: str) -> Artist:
+    def import_artist(self, spotify_id: str, with_tracks: bool = False) -> Artist:
         db_artist = session.query(Artist).filter_by(spotify_id=spotify_id).first()
         if db_artist is not None:
             return db_artist
@@ -124,7 +124,7 @@ class Spotify:
 
         return db_artist
 
-    def import_album(self, spotify_id: str) -> Album:
+    def import_album(self, spotify_id: str, with_tracks: bool = False) -> Album:
         db_album = session.query(Album).filter_by(spotify_id=spotify_id).first()
         if db_album is not None:
             return db_album
