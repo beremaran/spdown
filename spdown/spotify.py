@@ -201,7 +201,8 @@ class Spotify:
                          album=[album],
                          artists=artists,
                          disc_number=track['disc_number'],
-                         track_number=track['track_number'])
+                         track_number=track['track_number'],
+                         download=True)
 
         session.add(db_track)
         session.commit()
