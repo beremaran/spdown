@@ -170,3 +170,8 @@ class Track(Base):
 
     file_path = Column(String)
     download = Column(Boolean)
+
+    def __str__(self):
+        return '{} - {}'.format(
+            self.artists[0].name, self.name
+        )
