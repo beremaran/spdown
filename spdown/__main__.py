@@ -30,7 +30,7 @@ import argparse
 import logging
 import sys
 
-from spdown.db import session, Track
+from spdown.db import session, Track, Artist
 from spdown.spotify import Spotify
 from spdown.youtube import Youtube
 
@@ -70,7 +70,13 @@ def download_objects(options):
 
 
 def dump_library():
-    pass
+    artists = session.query(Artist).order_by('name').all()
+    for i, artist in enumerate(artists):
+        print('{:3d}) {}'.format(i + 1, artist.name))
+        for j, album in enumerate(artist.albums):
+            print('\t{:3d}) {}'.format(j + 1, album.title))
+            for k, track in enumerate(album.tracks):
+                print('\t\t{:3d}) {}'.format(k + 1, track.name))
 
 
 if __name__ == "__main__":

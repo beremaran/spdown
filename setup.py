@@ -23,7 +23,11 @@ setuptools.setup(
         'spotipy',
         'eyed3',
         'py-lru-cache',
-        'sqlalchemy'
+        'sqlalchemy',
+        'Cython',
+        'kivy',
+        'Pillow',
+        'pygame'
     ],
     scripts=[
         'bin/spdown'
