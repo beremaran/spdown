@@ -67,7 +67,10 @@ class Spotify:
         session.commit()
 
     def import_playlist(self, spotify_id: str):
-        # TODO: check if playlist already exists
+        db_playlist = session.query(Playlist).filter_by(spotify_id=spotify_id).first()
+        if db_playlist is not None:
+            return db_playlist
+
         tracks_final = []
         username = self._secrets.get_spotify_username()
 
