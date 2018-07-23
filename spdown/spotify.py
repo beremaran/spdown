@@ -25,6 +25,11 @@ SOFTWARE.
 """
 
 import spotipy
+
+from spdown.db.models import Track as DBTrack
+from spdown.db.models import Album
+
+from spdown.db import session, Artist
 from spdown.youtube import FILENAME_ILLEGAL_CHARS
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -58,6 +63,7 @@ class Spotify:
             self.import_track(spotify_id)
 
     def import_playlist(self, spotify_id: str):
+        # TODO: check if playlist already exists
         tracks_final = []
         username = self._secrets.get_spotify_username()
 
@@ -71,14 +77,38 @@ class Spotify:
         for track in tracks_final:
             self.import_track(track['id'])
 
-    def import_artist(self, spotify_id: str):
+    def import_artist(self, spotify_id: str) -> Artist:
         pass
 
-    def import_album(self, spotify_id: str):
+    def import_album(self, spotify_id: str) -> Album:
         pass
 
-    def import_track(self, spotify_id: str):
-        pass
+    def import_track(self, spotify_id: str) -> DBTrack:
+        db_track = session.query(DBTrack).filter_by(spotify_id=spotify_id).first()
+        if db_track is not None:
+            return db_track
+
+        track = self._client.track(spotify_id)
+        album = self.import_album(track['album']['id'])
+
+        artists = []
+        for artist in track['artists']:
+            artists.append(artist['id'])
+
+        artists = [
+            self.import_artist(artist)
+            for artist in artists
+        ]
+
+        db_track = DBTrack(spotify_id=spotify_id,
+                           name=track['name'],
+                           album=[album],
+                           artists=artists,
+                           disc_number=track['disc_number'],
+                           track_number=track['track_number'])
+
+        session.add(db_track)
+        session.commit()
 
     def extract_tracks(self, playlist_id: str) -> tuple:
         tracks_final = []
