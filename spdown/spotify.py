@@ -150,12 +150,22 @@ class Spotify:
             for genre in album['genres']
         ]
 
+        if with_tracks:
+            tracks = self._client.album_tracks(spotify_id)
+            tracks = [
+                self.import_track(track['id'])
+                for track in tracks
+            ]
+        else:
+            tracks = []
+
         db_album = Album(spotify_id=spotify_id,
                          title=album['name'],
                          album_type=album['album_type'],
                          artists=artists,
                          cover_art=album['images'][0]['url'],
-                         genres=genres)
+                         genres=genres,
+                         tracks=tracks)
 
         session.add(db_album)
         session.commit()
