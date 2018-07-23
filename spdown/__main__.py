@@ -36,29 +36,14 @@ from spdown.youtube import Youtube
 
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='spdown',
-                                     description='Downloads public Spotify playlists from YouTube')
 
-    parser.add_argument('spotify_uri',
-                        type=str,
-                        help='Spotify Playlist URI to download')
+def download_objects(options):
+    spotify_uri = options.command_options
+    if len(spotify_uri) == 1:
+        spotify_uri = spotify_uri[0]
 
-    parser.add_argument('--config',
-                        type=str,
-                        required=False,
-                        help='Configuration File')
-
-    parser.add_argument('--secrets',
-                        type=str,
-                        required=False,
-                        help='Spotify and Youtube API Secrets File')
-
-    args = parser.parse_args()
-
-    spotify_uri = args.spotify_uri
-    configuration_file = args.config
-    secrets_file = args.secrets
+    configuration_file = options.config
+    secrets_file = options.secrets
 
     spotify_uri = spotify_uri.split(',')
     spotify_uri = [
@@ -83,11 +68,39 @@ if __name__ == "__main__":
 
         youtube.download_tracks(tracks)
 
-        """
-        print('Extracting spotify tracks ...')
-        tracks, playlist_name = spotify.extract_tracks(uri)
-        print('Searching tracks on YouTube ...')
-        tracks = youtube.modify_tracks(tracks)
-        print('Downloading tracks from YouTube ...')
-        youtube.download_tracks(tracks)
-        """
+
+def dump_library():
+    pass
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog='spdown',
+                                     description='Downloads public Spotify playlists from YouTube')
+
+    parser.add_argument('command',
+                        type=str,
+                        choices=(
+                            'download', 'dump_library'
+                        ),
+                        help='Spotify Playlist URI to download')
+
+    parser.add_argument('command_options',
+                        type=str,
+                        nargs='*')
+
+    parser.add_argument('--config',
+                        type=str,
+                        required=False,
+                        help='Configuration File')
+
+    parser.add_argument('--secrets',
+                        type=str,
+                        required=False,
+                        help='Spotify and Youtube API Secrets File')
+
+    args = parser.parse_args()
+
+    if args.command == 'download':
+        download_objects(args)
+    if args.command == 'dump_library':
+        dump_library()
