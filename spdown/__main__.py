@@ -30,6 +30,7 @@ import argparse
 import logging
 import sys
 
+from spdown.db import session, Track
 from spdown.spotify import Spotify
 from spdown.youtube import Youtube
 
@@ -75,6 +76,13 @@ if __name__ == "__main__":
 
     for uri in spotify_uri:
         spotify.import_object(uri)
+
+        # fetch not downloaded tracks and download them
+        tracks = session.query(Track).filter_by(download=True, file_path=None).all()
+        tracks = youtube.modify_tracks(tracks)
+
+        youtube.download_tracks(tracks)
+
         """
         print('Extracting spotify tracks ...')
         tracks, playlist_name = spotify.extract_tracks(uri)

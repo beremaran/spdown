@@ -146,10 +146,12 @@ class Track(Base):
     name = Column(String)
     album = relationship('Album',
                          back_populates='tracks',
-                         secondary=album_track_table)
+                         secondary=album_track_table,
+                         lazy='subquery')
     artists = relationship('Artist',
                            back_populates='tracks',
-                           secondary=artist_track_table)
+                           secondary=artist_track_table,
+                           lazy='subquery')
     disc_number = Column(Integer)
     track_number = Column(Integer)
 
