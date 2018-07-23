@@ -179,7 +179,8 @@ class Spotify:
 
         return db_track
 
-    def _extract_tracks_from_resultset(self, tracks):
+    @staticmethod
+    def _extract_tracks_from_resultset(tracks):
         tracks_list = []
 
         for item in tracks['items']:
