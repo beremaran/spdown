@@ -26,15 +26,14 @@ SOFTWARE.
 
 import spotipy
 
-from spdown.db.models import Track as DBTrack
+from spdown.db.models import Track
 from spdown.db.models import Album
 
-from spdown.db import session, Artist
+from spdown.db import session, Artist, Genre, Playlist
 from spdown.youtube import FILENAME_ILLEGAL_CHARS
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from spdown.secrets import Secrets
-from spdown.track import Track
 
 from lru import lru_cache_function
 
@@ -62,6 +61,16 @@ class Spotify:
         if object_type == "track":
             self.import_track(spotify_id)
 
+    def import_genre(self, genre_name: str) -> Genre:
+        db_genre = session.query(Genre).filter_by(name=genre_name).first()
+        if db_genre is not None:
+            return db_genre
+
+        db_genre = Genre(name=genre_name)
+
+        session.add(db_genre)
+        session.commit()
+
     def import_playlist(self, spotify_id: str):
         # TODO: check if playlist already exists
         tracks_final = []
@@ -69,22 +78,85 @@ class Spotify:
 
         results = self._client.user_playlist(username, spotify_id, 'tracks,next,name')
         tracks = results['tracks']
-        tracks_final.extend(tracks)
+        tracks_final.extend(self._extract_tracks_from_resultset(tracks))
         while tracks['next']:
             tracks = self._client.next(tracks)
-            tracks_final.extend(tracks)
+            tracks_final.extend(self._extract_tracks_from_resultset(tracks))
 
-        for track in tracks_final:
+        tracks_final = [
             self.import_track(track['id'])
+            for track in tracks_final
+        ]
+
+        db_playlist = Playlist(spotify_id=spotify_id,
+                               name=results['name'],
+                               tracks=tracks_final)
+
+        session.add(db_playlist)
+        session.commit()
+
+        return db_playlist
 
     def import_artist(self, spotify_id: str) -> Artist:
-        pass
+        db_artist = session.query(Artist).filter_by(spotify_id=spotify_id).first()
+        if db_artist is not None:
+            return db_artist
+
+        artist = self._client.artist(spotify_id)
+        image = None
+        if len(artist['images']) > 0:
+            image = artist['images'][0]['url']
+
+        genres = [
+            self.import_genre(genre)
+            for genre in artist['genres']
+        ]
+
+        genres = [genre for genre in genres if genre is not None]
+
+        db_artist = Artist(spotify_id=spotify_id,
+                           name=artist['name'],
+                           image=image,
+                           genres=genres,
+                           albums=[],
+                           tracks=[])
+
+        session.add(db_artist)
+        session.commit()
+
+        return db_artist
 
     def import_album(self, spotify_id: str) -> Album:
-        pass
+        db_album = session.query(Album).filter_by(spotify_id=spotify_id).first()
+        if db_album is not None:
+            return db_album
 
-    def import_track(self, spotify_id: str) -> DBTrack:
-        db_track = session.query(DBTrack).filter_by(spotify_id=spotify_id).first()
+        album = self._client.album(spotify_id)
+
+        artists = [
+            self.import_artist(artist['id'])
+            for artist in album['artists']
+        ]
+
+        genres = [
+            self.import_genre(genre)
+            for genre in album['genres']
+        ]
+
+        db_album = Album(spotify_id=spotify_id,
+                         title=album['name'],
+                         album_type=album['album_type'],
+                         artists=artists,
+                         cover_art=album['images'][0]['url'],
+                         genres=genres)
+
+        session.add(db_album)
+        session.commit()
+
+        return db_album
+
+    def import_track(self, spotify_id: str) -> Track:
+        db_track = session.query(Track).filter_by(spotify_id=spotify_id).first()
         if db_track is not None:
             return db_track
 
@@ -100,15 +172,17 @@ class Spotify:
             for artist in artists
         ]
 
-        db_track = DBTrack(spotify_id=spotify_id,
-                           name=track['name'],
-                           album=[album],
-                           artists=artists,
-                           disc_number=track['disc_number'],
-                           track_number=track['track_number'])
+        db_track = Track(spotify_id=spotify_id,
+                         name=track['name'],
+                         album=[album],
+                         artists=artists,
+                         disc_number=track['disc_number'],
+                         track_number=track['track_number'])
 
         session.add(db_track)
         session.commit()
+
+        return db_track
 
     def extract_tracks(self, playlist_id: str) -> tuple:
         tracks_final = []
@@ -137,7 +211,7 @@ class Spotify:
         tracks_list = []
 
         for item in tracks['items']:
-            tracks_list.append(self._extract_track(item['track']))
+            tracks_list.append(item['track'])
 
         return tracks_list
 
