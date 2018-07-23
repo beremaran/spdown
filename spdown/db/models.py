@@ -53,6 +53,8 @@ def Playlist(Base):
     __tablename__ = 'playlists'
 
     id = Column(Integer)
+    spotify_id = Column(String)
+
     name = Column(String)
     tracks = relationship('Track',
                           secondary=track_playlist_table)
@@ -76,6 +78,7 @@ class Artist(Base):
     __tablename__ = 'artists'
 
     id = Column(Integer, primary_key=True)
+    spotify_id = Column(String)
 
     name = Column(String)
     image = Column(String)
@@ -94,6 +97,7 @@ class Album(Base):
     __tablename__ = 'albums'
 
     id = Column(Integer, primary_key=True)
+    spotify_id = Column(String)
 
     title = Column(String)
     album_type = Column(String)  # album, single or compilation
