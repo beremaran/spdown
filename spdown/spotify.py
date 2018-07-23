@@ -25,17 +25,12 @@ SOFTWARE.
 """
 
 import spotipy
-
-from spdown.db.models import Track
-from spdown.db.models import Album
-
-from spdown.db import session, Artist, Genre, Playlist
-from spdown.youtube import FILENAME_ILLEGAL_CHARS
 from spotipy.oauth2 import SpotifyClientCredentials
 
+from spdown.db import session, Artist, Genre, Playlist
+from spdown.db.models import Album
+from spdown.db.models import Track
 from spdown.secrets import Secrets
-
-from lru import lru_cache_function
 
 
 class Spotify:
