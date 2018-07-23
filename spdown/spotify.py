@@ -165,7 +165,7 @@ class Spotify:
                          artists=artists,
                          cover_art=album['images'][0]['url'],
                          genres=genres,
-                         tracks=tracks)
+                         tracks=[])
 
         session.add(db_album)
         session.commit()
