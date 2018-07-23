@@ -81,7 +81,8 @@ class Playlist(Base):
 
     name = Column(String)
     tracks = relationship('Track',
-                          secondary=track_playlist_table)
+                          secondary=track_playlist_table,
+                          lazy='subquery')
 
 
 class Genre(Base):
@@ -92,10 +93,12 @@ class Genre(Base):
 
     artists = relationship('Artist',
                            back_populates='genres',
-                           secondary=genre_artist_table)
+                           secondary=genre_artist_table,
+                           lazy='subquery')
     albums = relationship('Album',
                           back_populates='genres',
-                          secondary=genre_album_table)
+                          secondary=genre_album_table,
+                          lazy='subquery')
 
 
 class Artist(Base):
@@ -108,13 +111,16 @@ class Artist(Base):
     image = Column(String)
     genres = relationship('Genre',
                           back_populates='artists',
-                          secondary=genre_artist_table)
+                          secondary=genre_artist_table,
+                          lazy='subquery')
     albums = relationship('Album',
                           back_populates='artists',
-                          secondary=artist_album_table)
+                          secondary=artist_album_table,
+                          lazy='subquery')
     tracks = relationship('Track',
                           back_populates='artists',
-                          secondary=artist_track_table)
+                          secondary=artist_track_table,
+                          lazy='subquery')
 
 
 class Album(Base):
@@ -127,13 +133,16 @@ class Album(Base):
     album_type = Column(String)  # album, single or compilation
     artists = relationship('Artist',
                            back_populates='albums',
-                           secondary=artist_album_table)
+                           secondary=artist_album_table,
+                           lazy='subquery')
     cover_art = Column(String)
     tracks = relationship('Track',
-                          secondary=album_track_table)
+                          secondary=album_track_table,
+                          lazy='subquery')
     genres = relationship('Genre',
                           back_populates='albums',
-                          secondary=genre_album_table)
+                          secondary=genre_album_table,
+                          lazy='subquery')
 
 
 class Track(Base):
