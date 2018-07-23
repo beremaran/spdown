@@ -156,3 +156,5 @@ class Track(Base):
     playlists = relationship('Playlist',
                              back_populates='tracks',
                              secondary=track_playlist_table)
+
+    file_path = Column(String)
