@@ -37,7 +37,7 @@ from googleapiclient.discovery import build
 
 from spdown.config import Config
 from spdown.secrets import Secrets
-from spdown.track import Track
+from spdown.db.models import Track
 
 NON_ALPHANUM_PATTERN = re.compile('[\W_]+', re.UNICODE)
 BASE_YOUTUBE_URL = 'https://www.youtube.com/watch?v={}'
@@ -64,7 +64,7 @@ class Youtube:
         self._service = build('youtube', 'v3', developerKey=self._developer_key)
 
     def search_track(self, track: Track) -> dict:
-        track_title = str(track)
+        track_title = '{} - {}'.format(track.artists[0].name, track.name)
         print('Searching', track_title, '...')
         results = self._service.search().list(
             maxResults='1',
