@@ -70,12 +70,6 @@ if __name__ == "__main__":
             sys.stderr.write('Corrupt Spotify URI Format! ({})\n'.format(uri))
             exit(1)
 
-        uri_tokens = uri.split(':')
-        if 'playlist' != uri_tokens[-2]:
-            sys.stderr.write('A Spotify Playlist URI is required!\n')
-            sys.stderr.write('Given type: {}\n'.format(uri_tokens[-2]))
-            exit(2)
-
     spotify = Spotify(secrets_file)
     youtube = Youtube(configuration_file)
 
