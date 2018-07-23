@@ -138,6 +138,15 @@ class Spotify:
         if db_album is not None:
             return db_album
 
+        if with_tracks:
+            tracks = self._client.album_tracks(spotify_id)['items']
+            tracks = [
+                self.import_track(track['id'])
+                for track in tracks
+            ]
+
+            return session.query(Album).filter_by(spotify_id=spotify_id).first()
+
         album = self._client.album(spotify_id)
 
         artists = [
@@ -149,15 +158,6 @@ class Spotify:
             self.import_genre(genre)
             for genre in album['genres']
         ]
-
-        if with_tracks:
-            tracks = self._client.album_tracks(spotify_id)['items']
-            tracks = [
-                self.import_track(track['id'])
-                for track in tracks
-            ]
-        else:
-            tracks = []
 
         db_album = Album(spotify_id=spotify_id,
                          title=album['name'],
