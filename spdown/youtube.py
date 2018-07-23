@@ -36,6 +36,7 @@ import youtube_dl
 from googleapiclient.discovery import build
 
 from spdown.config import Config
+from spdown.db import session
 from spdown.secrets import Secrets
 from spdown.db.models import Track
 
@@ -90,6 +91,7 @@ class Youtube:
             print('Can\'t find video for track:', str(track))
             track.youtube_id = None
 
+        session.commit()
         return track
 
     def _get_ytdl_options(self, filename):
