@@ -151,7 +151,7 @@ class Spotify:
         ]
 
         if with_tracks:
-            tracks = self._client.album_tracks(spotify_id)
+            tracks = self._client.album_tracks(spotify_id)['items']
             tracks = [
                 self.import_track(track['id'])
                 for track in tracks
