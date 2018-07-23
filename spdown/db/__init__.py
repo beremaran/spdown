@@ -7,7 +7,7 @@ from spdown.db.models import *
 from spdown.config import Config
 
 config = Config()
-db_path = config.get('database_path')
+db_path = 'db.sqlite3'
 del config
 del Config
 
