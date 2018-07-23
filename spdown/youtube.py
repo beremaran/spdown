@@ -30,6 +30,7 @@ import multiprocessing
 import os
 import re
 import sys
+from uuid import uuid4
 
 import eyed3
 import youtube_dl
@@ -94,12 +95,15 @@ class Youtube:
         session.commit()
         return track
 
-    def _get_ytdl_options(self, filename):
+    def _get_ytdl_options(self, track: Track):
         download_directory = self._config.get('download_directory')
+        filename = '{}/{}/{}.%(ext)s'.format(
+            track.artists[0].name,
+            track.album[0].title,
+            uuid4()
+        )
 
-        for illegal_char in FILENAME_ILLEGAL_CHARS:
-            filename = filename.replace(illegal_char, '')
-        filename = os.path.join(download_directory, filename + '.%(ext)s')
+        filename = os.path.join(download_directory, filename)
 
         if not os.path.exists(download_directory):
             os.mkdir(download_directory)
@@ -125,20 +129,13 @@ class Youtube:
             print('No youtube ID for track', str(track), '!')
             return
 
-        ytdl_options = self._get_ytdl_options(str(track))
+        ytdl_options = self._get_ytdl_options(track)
 
         # create directories
-        outtmpl = ytdl_options['outtmpl']
-        outtmpl = outtmpl.split(os.path.sep)
-        outtmpl.insert(-1, track.artist)
-        outtmpl.insert(-1, track.album_name)
-        outtmpl = os.path.sep.join(outtmpl)
 
-        if self._exists(outtmpl.replace('%(ext)s', 'mp3')):
+        if track.file_path is not None:
             print('Skipping already downloaded file ...')
             return
-
-        ytdl_options['outtmpl'] = outtmpl
 
         ytdl = youtube_dl.YoutubeDL(ytdl_options)
 
@@ -159,12 +156,12 @@ class Youtube:
             mp3 = eyed3.mp3.Mp3AudioFile(mp3_path)
             mp3.initTag(version=eyed3.id3.ID3_V2_3)
 
-        mp3.tag.artist = track.artist
-        mp3.tag.title = track.title
-        mp3.tag.album = track.album_name
-        mp3.tag.album_artist = track.artist
+        mp3.tag.artist = track.artists[0].name
+        mp3.tag.title = track.name
+        mp3.tag.album = track.album[0].title
+        mp3.tag.album_artist = track.artists[0].name
         mp3.tag.disc_num = 1
-        mp3.tag.genre = track.artist_genre
+        mp3.tag.genre = track.album[0].genres[0].name
         mp3.tag.save()
 
         return mp3_path
