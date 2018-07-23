@@ -164,7 +164,18 @@ class Youtube:
         mp3.tag.genre = track.album[0].genres[0].name
         mp3.tag.save()
 
-        return mp3_path
+        path_tokens = mp3_path.split(os.path.sep)
+        filename = '.'.join([
+            track.artists[0].name, track.name, 'mp3'
+        ])
+        path_tokens[-1] = filename
+        new_path = os.path.sep.join(path_tokens)
+
+        os.rename(mp3_path, new_path)
+        track.file_path = new_path
+        session.commit()
+        
+        return new_path
 
     def download_tracks(self, tracks: list):
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
