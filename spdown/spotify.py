@@ -102,7 +102,7 @@ class Spotify:
 
         if with_tracks:
             print('Importing artist with tracks ...')
-            albums = self._client.artist_albums(spotify_id, limit=50)
+            albums = self._client.artist_albums(spotify_id, limit=50)['items']
             albums = [
                 self.import_album(album['id'], with_tracks=True)
                 for album in albums
