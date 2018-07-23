@@ -101,13 +101,16 @@ class Spotify:
             return db_artist
 
         if with_tracks:
-            albums = self._client.artist_albums(spotify_id, limit=100)
+            print('Importing artist with tracks ...')
+            albums = self._client.artist_albums(spotify_id, limit=50)
             albums = [
                 self.import_album(album['id'], with_tracks=True)
                 for album in albums
             ]
 
             return session.query(Artist).filter_by(spotify_id=spotify_id).first()
+
+        print('Importing artist ...')
 
         artist = self._client.artist(spotify_id)
         image = None
@@ -139,6 +142,8 @@ class Spotify:
             return db_album
 
         if with_tracks:
+            print('Importing album with tracks ...')
+
             tracks = self._client.album_tracks(spotify_id)['items']
             tracks = [
                 self.import_track(track['id'])
@@ -146,6 +151,8 @@ class Spotify:
             ]
 
             return session.query(Album).filter_by(spotify_id=spotify_id).first()
+
+        print('Importing album ...')
 
         album = self._client.album(spotify_id)
 
