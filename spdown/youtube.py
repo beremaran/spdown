@@ -87,19 +87,24 @@ class Youtube:
     def modify_track(self, track: Track) -> Track:
         search_result = self.search_track(track)
         try:
-            track.youtube_id = search_result['id']['videoId']
+            youtube_id = search_result['id']['videoId']
         except KeyError:
             print('Can\'t find video for track:', str(track))
-            track.youtube_id = None
+            youtube_id = None
 
+        session.query(Track).filter_by(id=track.id).update({
+            'youtube_id': youtube_id
+        })
         session.commit()
+
+        track = session.query(Track).filter_by(id=track.id).first()
         return track
 
     def _get_ytdl_options(self, track: Track):
         download_directory = self._config.get('download_directory')
         filename = '{}/{}/{}.%(ext)s'.format(
-            track.artists[0].name,
-            track.album[0].title,
+            track.artists[0].name.replace('/', ''),
+            track.album[0].title.replace('/', ''),
             uuid4()
         )
 
@@ -175,10 +180,10 @@ class Youtube:
 
         path_tokens = mp3_path.split(os.path.sep)
         filename = '{}.mp3'.format(
-            '-'.join([
+            ' - '.join([
                 track.artists[0].name, track.name
             ])
-        )
+        ).replace('/', '')
         path_tokens[-1] = filename
         new_path = os.path.sep.join(path_tokens)
 
@@ -186,7 +191,10 @@ class Youtube:
             os.remove(new_path)
 
         os.rename(mp3_path, new_path)
-        track.file_path = new_path
+        session.query(Track).filter_by(id=track.id).update({
+            'file_path': new_path,
+            'download': False
+        })
         session.commit()
 
         return new_path
