@@ -214,34 +214,3 @@ class Spotify:
             tracks_list.append(item['track'])
 
         return tracks_list
-
-    @staticmethod
-    @lru_cache_function(max_size=1024, expiration=15 * 60)
-    def _extract_artist(spotify_client, artist_id):
-        if artist_id is not None:
-            genres = spotify_client.artist(artist_id)['genres']
-            if len(genres) > 0:
-                return genres[0]
-
-        return None
-
-    def _extract_track(self, track) -> Track:
-        _track = Track()
-
-        _track.artist = track['artists'][0]['name']
-        _track.title = track['name']
-        _track.spotify_id = track['id']
-        _track.album_name = track['album']['name']
-
-        artist_id = track['artists'][0]['id']
-        _track.artist_genre = self._extract_artist(spotify_client=self._client, artist_id=artist_id)
-
-        while len(_track.artist) > 0 and _track.artist[-1] in FILENAME_ILLEGAL_CHARS:
-            _track.artist = _track.artist[:-1]
-        while len(_track.title) > 0 and _track.title[-1] in FILENAME_ILLEGAL_CHARS:
-            _track.title = _track.title[:-1]
-        # remove illegal characters from album names
-        for illegal_char in FILENAME_ILLEGAL_CHARS:
-            _track.album_name = _track.album_name.replace(illegal_char, '')
-
-        return _track
