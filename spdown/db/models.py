@@ -49,10 +49,10 @@ track_playlist_table = Table(
 )
 
 
-def Playlist(Base):
+class Playlist(Base):
     __tablename__ = 'playlists'
 
-    id = Column(Integer)
+    id = Column(Integer, primary_key=True)
     spotify_id = Column(String)
 
     name = Column(String)
