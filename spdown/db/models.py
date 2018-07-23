@@ -41,6 +41,22 @@ album_track_table = Table(
     Column('track_id', Integer, ForeignKey('tracks.id'))
 )
 
+# Track - Playlist Association Table
+track_playlist_table = Table(
+    'tracks_playlists', Base.metadata,
+    Column('track_id', Integer, ForeignKey('tracks.id')),
+    Column('playlist_id', Integer, ForeignKey('playlists.id'))
+)
+
+
+def Playlist(Base):
+    __tablename__ = 'playlists'
+
+    id = Column(Integer)
+    name = Column(String)
+    tracks = relationship('Track',
+                          secondary=track_playlist_table)
+
 
 class Genre(Base):
     __tablename__ = 'genres'
@@ -108,3 +124,7 @@ class Track(Base):
                            secondary=artist_track_table)
     disc_number = Column(Integer)
     track_number = Column(Integer)
+
+    playlists = relationship('Playlist',
+                             back_populates='tracks',
+                             secondary=track_playlist_table)
