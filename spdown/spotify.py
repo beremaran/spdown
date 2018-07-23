@@ -43,6 +43,43 @@ class Spotify:
                                                      client_secret=client_secret)
         self._client = spotipy.Spotify(client_credentials_manager=self._credentials)
 
+    def import_object(self, spotify_uri: str):
+        tokens = spotify_uri.split(':')
+        object_type = tokens[-2]
+        spotify_id = tokens[-1]
+
+        if object_type == "playlist":
+            self.import_playlist(spotify_id)
+        if object_type == "artist":
+            self.import_artist(spotify_id)
+        if object_type == "album":
+            self.import_album(spotify_id)
+        if object_type == "track":
+            self.import_track(spotify_id)
+
+    def import_playlist(self, spotify_id: str):
+        tracks_final = []
+        username = self._secrets.get_spotify_username()
+
+        results = self._client.user_playlist(username, spotify_id, 'tracks,next,name')
+        tracks = results['tracks']
+        tracks_final.extend(tracks)
+        while tracks['next']:
+            tracks = self._client.next(tracks)
+            tracks_final.extend(tracks)
+
+        for track in tracks_final:
+            self.import_track(track['id'])
+
+    def import_artist(self, spotify_id: str):
+        pass
+
+    def import_album(self, spotify_id: str):
+        pass
+
+    def import_track(self, spotify_id: str):
+        pass
+
     def extract_tracks(self, playlist_id: str) -> tuple:
         tracks_final = []
         username = self._secrets.get_spotify_username()
