@@ -182,6 +182,9 @@ class Youtube:
         path_tokens[-1] = filename
         new_path = os.path.sep.join(path_tokens)
 
+        if os.path.exists(new_path):
+            os.remove(new_path)
+
         os.rename(mp3_path, new_path)
         track.file_path = new_path
         session.commit()
