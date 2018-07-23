@@ -112,11 +112,20 @@ class Spotify:
 
         genres = [genre for genre in genres if genre is not None]
 
+        if with_tracks:
+            albums = self._client.artist_albums(spotify_id, limit=100)
+            albums = [
+                self.import_album(album['id'], with_tracks=True)
+                for album in albums
+            ]
+        else:
+            albums = []
+
         db_artist = Artist(spotify_id=spotify_id,
                            name=artist['name'],
                            image=image,
                            genres=genres,
-                           albums=[],
+                           albums=albums,
                            tracks=[])
 
         session.add(db_artist)
