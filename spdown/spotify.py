@@ -86,6 +86,12 @@ class Spotify:
             for track in tracks_final
         ]
 
+        tracks_final = [
+            track
+            for track in tracks_final
+            if track is not None
+        ]
+
         db_playlist = Playlist(spotify_id=spotify_id,
                                name=results['name'],
                                tracks=tracks_final)
@@ -180,6 +186,9 @@ class Spotify:
         return db_album
 
     def import_track(self, spotify_id: str) -> Track:
+        if spotify_id is None:
+            return None
+
         db_track = session.query(Track).filter_by(spotify_id=spotify_id).first()
         if db_track is not None:
             return db_track
