@@ -179,29 +179,6 @@ class Spotify:
 
         return db_track
 
-    def extract_tracks(self, playlist_id: str) -> tuple:
-        tracks_final = []
-        username = self._secrets.get_spotify_username()
-
-        if ':' in playlist_id:
-            playlist_id = playlist_id.split(':')[-1]
-
-        results = self._client.user_playlist(username, playlist_id, 'tracks,next,name')
-        tracks = results['tracks']
-
-        tracks_final.extend(
-            self._extract_tracks_from_resultset(tracks)
-        )
-        while tracks['next']:
-            tracks = self._client.next(tracks)
-            tracks_final.extend(
-                self._extract_tracks_from_resultset(tracks)
-            )
-
-        playlist_name = results['name']
-
-        return tuple(tracks_final), playlist_name
-
     def _extract_tracks_from_resultset(self, tracks):
         tracks_list = []
 
