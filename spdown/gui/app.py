@@ -3,15 +3,12 @@ from kivy.adapters.listadapter import ListAdapter
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.listview import ListView, ListItemButton
+from kivy.uix.listview import ListItemButton
 from kivy.uix.scrollview import ScrollView
 
 from spdown.db import Artist, session, Playlist, Album
+from spdown.gui.listview import SPListView
 from spdown.gui.treeview import SPTreeView, SPTreeNode
-
-
-def test_click_handler(selected_node):
-    print(selected_node)
 
 
 class SPDown(App):
@@ -24,14 +21,19 @@ class SPDown(App):
 
     def build(self):
         horizontal_box = BoxLayout(orientation='horizontal')
-        vertical_box = BoxLayout(orientation='vertical')
+        vertical_box_right = BoxLayout(orientation='vertical')
+        vertical_box_left = BoxLayout(orientation='vertical',
+                                      size_hint=(.4, 1))
 
-        horizontal_box.add_widget(self.build_navigator())
+        vertical_box_left.add_widget(Label(text='Library',
+                                           size_hint=(1, .1)))
+        vertical_box_left.add_widget(self.build_navigator())
+        horizontal_box.add_widget(vertical_box_left)
 
-        vertical_box.add_widget(Label(text='Playlists', size_hint=(1, .1)))
-        vertical_box.add_widget(self.build_track_navigator())
+        vertical_box_right.add_widget(Label(text='Playlists', size_hint=(1, .1)))
+        vertical_box_right.add_widget(self.build_track_navigator())
 
-        horizontal_box.add_widget(vertical_box)
+        horizontal_box.add_widget(vertical_box_right)
 
         self.populate_navigator()
         self.navigator.add_click_handler(self._navigator_click_handler)
@@ -39,7 +41,7 @@ class SPDown(App):
         return horizontal_box
 
     def build_navigator(self):
-        scroll = ScrollView(pos=(0, 0), size_hint=(.4, 1))
+        scroll = ScrollView(pos=(0, 0), size_hint=(1, 0.9))
         nav = SPTreeView(hide_root=True, size_hint=(1, None))
         nav.bind(minimum_height=nav.setter('height'))
 
@@ -49,7 +51,7 @@ class SPDown(App):
 
     def build_track_navigator(self):
         scroll = ScrollView(pos=(0, 0), size_hint=(1, 1))
-        nav = ListView(size_hint=(1, 1))
+        nav = SPListView(size_hint=(1, 1))
 
         scroll.add_widget(nav)
         self.track_navigator = nav
